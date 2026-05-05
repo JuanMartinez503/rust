@@ -12,6 +12,10 @@ enum LoginData  {
     Not_Registered,
     Username(String)
 }
+// enum Option<T> {
+//     Some(T),
+//     None
+// }
 impl PermissionLevel {
     fn description (&self)->String{
         //match is similar to a switch statement must match all enum
@@ -22,6 +26,19 @@ impl PermissionLevel {
 
         }
     }//this is a method 
+       fn is_admin(&self)->bool {
+        match self {
+            PermissionLevel::Admin=>true,
+            _=>false
+        }
+    }
+      fn is_admin2(&self)->bool {
+        if let PermissionLevel::Admin  = self {
+            true 
+        } else {
+            false
+        }
+    }
 }
 
 
@@ -42,6 +59,10 @@ println!("{number}");
 // enum_lesson();
 // matches_example();
 second_enum();
+matches_example();
+// option_num();
+// nested_value();
+while_let();
 }
 //the params types has always be defined
 
@@ -96,7 +117,7 @@ fn matches_example (){
     match number {
         1=>{
             println!("one");
-        }
+        },
         2|3|5|7|11=>println!("Prime"),
         _ =>println!("None")//default case
         
@@ -121,4 +142,70 @@ fn second_enum (){
 
 
 
+}
+fn option_num (){
+let x:u32 = 5;
+let y:Option<u32> = Some(5); //the option type takes a generic T which can be used as any 
+println!("x +y = {}", add(x, y));
+
+
+    fn add(x:u32 ,y:Option<u32>) ->u32 {
+        //match is required to cover all the bases for the case not to fail
+        match y {
+            Some(y_val) =>x + y_val,
+            None =>x +0
+            
+        }
+    }
+}
+fn if_let() {
+    
+
+ //i had to move the function is_admin and is_admin2 to the impl to avoid errors
+  
+}
+fn nested_value() {
+
+    let x :Option<u32> = Some(20);
+    let y :Option<u32> = Some(25);
+
+    println!("nested value 1 ={}", add(x,y));
+
+    let x :Option<u32> = Some(20);
+    let y :Option<u32> = None;
+
+    println!("nested value 2 ={}", add(x,y));
+    
+
+    //this option avoids the nesting which match uses which is confusing
+    fn add(x: Option<u32>, y:Option<u32>)->u32 {
+        let a_value = if let Some(a_val) = x {a_val} else{0};
+        let b_value = if let Some(b_val) = y {b_val} else{0};
+
+        a_value+b_value
+    }
+    
+}
+fn while_let() {
+
+    fn while_range() {
+
+        let mut nums = 0..=10;
+        //the next() can be called on ranges and the array has to be mut
+        while let Some(num) =nums.next(){
+            println!("while range:{num}")
+        }
+    }
+    fn while_array() {
+        //for you to call the next() on the array, it has to be converted into an iter first
+        let mut arr =[0,1,2,3].into_iter();
+        while let Some(num) = arr.next()  {
+            println!("while array:{num}")
+
+            
+        }
+    }
+    while_array();
+    while_range();
+    
 }
